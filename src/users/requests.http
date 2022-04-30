@@ -1,0 +1,17 @@
+### Create a new User
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "email": "djrayhan11@gmail.com",
+    "password": "password",
+    "name": "djrayhan"
+}
+
+
+### Get All Users, Query with Email
+GET http://localhost:3000/auth/users?email=djrayhan8@gmail.com
+
+
+### Get a User
+GET http://localhost:3000/auth/users/1
