@@ -7,8 +7,12 @@ import {
   Delete,
   Query,
   Param,
+  NotFoundException,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dtos/create-user.dto';
+import { UpdateUserDTO } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 
 @Controller('auth')
@@ -31,9 +35,28 @@ export class UsersController {
     return users;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('/users/:id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(parseInt(id));
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
+  @Delete('/users/:id')
+  async deleteUser(@Param('id') id: string) {
+    const user = await this.usersService.remove(parseInt(id));
+
+    return user;
+  }
+
+  @Patch('/users/:id')
+  async updateUser(@Param('id') id: string, @Body() body: UpdateUserDTO) {
+    const user = await this.usersService.update(parseInt(id), body);
 
     return user;
   }
